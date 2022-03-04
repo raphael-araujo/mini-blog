@@ -14,10 +14,10 @@ class Blogger(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('author-bio', args=self.name)
+        return reverse('author-detail', args=self.name)
 
 
-class Comments:
+class Comment(models.Model):
     comment_author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     comment_date = models.DateTimeField(auto_now_add=True)
     commentary = models.TextField(max_length=500)
@@ -31,7 +31,7 @@ class Blog(models.Model):
     post_date = models.DateField(auto_now_add=True)
     author = models.ForeignKey(Blogger, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=500)
-    comments = models.ManyToManyField(Comments, help_text='comments for this post')
+    comments = models.ManyToManyField(Comment, help_text='comments for this post')
 
     def __str__(self):
         return self.title
