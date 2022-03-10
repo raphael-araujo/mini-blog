@@ -6,15 +6,15 @@ from django.urls import reverse
 
 
 class Blogger(models.Model):
-    name = models.CharField(max_length=64, help_text='enter a blogger name')
+    first_name = models.CharField(max_length=64,  null=True, help_text='Blogger first name')
+    last_name = models.CharField(max_length=64, null=True, help_text='Blogger last name')
     bio = models.TextField(max_length=500, null=True, blank=True)
-    # blogs = models.ForeignKey(Blog)
-
+    
     def __str__(self):
-        return self.name
+        return f'{self.first_name} {self.last_name}'
 
     def get_absolute_url(self):
-        return reverse('author-detail', args=self.name)
+        return reverse('author-detail', args=self.first_name)
 
 
 class Comment(models.Model):
@@ -23,7 +23,7 @@ class Comment(models.Model):
     commentary = models.TextField(max_length=500)
 
     def __str__(self):
-        return self.comment_author
+        return f'\nUser: {self.comment_author.username} | {self.commentary[:75].strip()}...'
 
 
 class Blog(models.Model):
@@ -31,7 +31,7 @@ class Blog(models.Model):
     post_date = models.DateField(auto_now_add=True)
     author = models.ForeignKey(Blogger, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=500)
-    comments = models.ManyToManyField(Comment, help_text='comments for this post')
+    comments = models.ManyToManyField(Comment, blank=True, help_text='comments for this post', editable=False)
 
     def __str__(self):
         return self.title
