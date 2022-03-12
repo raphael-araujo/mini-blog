@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Home</title>
+{%endblock%}
+
+{% block content %}
+    <h1>Django Mini Blog</h1>
+    <p>Welcome to Mini Blog!</p>
+    <h2>Dynamic content</h2>
+    <p>The blog has the following record counts:</p>
+    <ul>
+        <li><strong>Blogs: </strong>{{ num_blogs }}</li>
+        <li><strong>Authors: </strong>{{ num_bloggers }}</li>
+    </ul>
+
+    <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+
+{% endblock %}
