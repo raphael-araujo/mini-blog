@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views import generic
+
 from .models import Blog, Blogger, Comment
 
 # Create your views here.
@@ -26,3 +28,10 @@ def index(request):
     }
     
     return render(request, 'index.html', context)
+
+
+class BlogsListView(generic.ListView):
+    """class-based view que lista os blogs"""
+    model = Blog
+    ordering = ['-post_date']  # Ordena a lista por data de postagem (mais recente).
+    paginate_by = 5
