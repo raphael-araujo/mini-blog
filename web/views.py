@@ -35,3 +35,10 @@ class BlogsListView(generic.ListView):
     model = Blog
     ordering = ['-post_date']  # Ordena a lista por data de postagem (mais recente).
     paginate_by = 5
+
+
+class BloggersListView(generic.ListView):
+    """class-based view que lista os blogueiros"""
+    model = Blogger
+    ordering = ['first_name']  # Ordena a lista por ordem alfabética.
+    paginate_by = 5
