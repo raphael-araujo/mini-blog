@@ -9,6 +9,7 @@ admin.site.register(Comment)
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'post_date')
+    prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ['comments']
 
 
