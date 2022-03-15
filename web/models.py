@@ -14,7 +14,7 @@ class Blogger(models.Model):
         return f'{self.first_name} {self.last_name}'
 
     def get_absolute_url(self):
-        return reverse('author-detail', args=self.first_name)
+        return reverse('blogger_detail', args=self.first_name)
 
 
 class Comment(models.Model):
@@ -28,6 +28,7 @@ class Comment(models.Model):
 
 class Blog(models.Model):
     title = models.CharField(max_length=100, help_text='Blog title')
+    slug = models.SlugField(max_length=100,null=True, blank=True, db_index=True, help_text='for URL purposes.')
     post_date = models.DateField(auto_now_add=True)
     author = models.ForeignKey(Blogger, on_delete=models.SET_NULL, null=True)
     description = models.TextField(max_length=500)
@@ -37,4 +38,6 @@ class Blog(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('blog-detail', args=self.title)
+        return reverse('blog_detail', args=[str(self.slug)])
+        # return reverse('blog_detail', kwargs={'title': str(self.title)})
+
