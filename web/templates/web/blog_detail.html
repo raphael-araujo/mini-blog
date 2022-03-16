@@ -12,10 +12,16 @@
     <div style="margin-left:20px;margin-top:20px">
         <h4>Comments</h4>
         <hr>
-        {% for comment in blog.comments.all %}
-            <p align="justify">{{ comment.comment_author }} ({{ comment.comment_date }}) - {{ comment.commentary}}</p>
+        {% if blog.comments.all %}
+            {% for comment in blog.comments.all %}
+                <p align="justify">
+                    <strong>{{ comment.comment_author }} ({{ comment.comment_date }})</strong> - {{ comment.commentary}}
+                </p>
+            {% endfor %}
+        {% else %}
+            <p>there are no comments</p>
+        {% endif %}
         <hr>
-        {% endfor %}
         <p>
             {% if user.is_authenticated %}
                 <a href="">Add a new comment</a>
