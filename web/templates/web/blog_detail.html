@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Blog Details</title>{% endblock %}
+
+{% block content %}
+    <h1>{{ blog.title }}</h1>
+    <p><strong>Post date</strong> {{ blog.post_date }}</p>
+    <p><strong>Author:</strong> <a href="">{{ blog.author }}</a></p>
+    <p><strong>Description:</strong></p>
+    <p align="justify">{{ blog.description }}</p>
+
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Comments</h4>
+        <hr>
+        {% for comment in blog.comments.all %}
+            <p align="justify">{{ comment.comment_author }} ({{ comment.comment_date }}) - {{ comment.commentary}}</p>
+        <hr>
+        {% endfor %}
+        <p>
+            <a href="">Add a new comment</a>
+        </p>
+    </div>
+
+{% endblock %}

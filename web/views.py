@@ -37,6 +37,11 @@ class BlogsListView(generic.ListView):
     paginate_by = 5
 
 
+class BlogDetailView(generic.DetailView):
+    """class-based view que mostra os detalhes de um blog"""
+    model = Blog
+
+
 class BloggersListView(generic.ListView):
     """class-based view que lista os blogueiros"""
     model = Blogger
