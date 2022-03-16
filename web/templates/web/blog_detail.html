@@ -17,7 +17,11 @@
         <hr>
         {% endfor %}
         <p>
-            <a href="">Add a new comment</a>
+            {% if user.is_authenticated %}
+                <a href="">Add a new comment</a>
+            {% else %}
+                <a href="">Login</a> to add a new comment
+            {% endif %}
         </p>
     </div>
 
