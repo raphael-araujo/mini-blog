@@ -47,3 +47,9 @@ class BloggersListView(generic.ListView):
     model = Blogger
     ordering = ['first_name']  # Ordena a lista por ordem alfabética.
     paginate_by = 5
+
+
+class BloggerDetailView(generic.DetailView):
+    """class-based view que mostra os detalhes de um blogueiro"""
+    model = Blogger
+    
