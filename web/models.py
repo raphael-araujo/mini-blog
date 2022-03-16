@@ -8,7 +8,7 @@ from django.urls import reverse
 class Blogger(models.Model):
     first_name = models.CharField(max_length=64,  null=True, help_text='Blogger first name')
     last_name = models.CharField(max_length=64, null=True, help_text='Blogger last name')
-    bio = models.TextField(max_length=500, null=True, blank=True)
+    bio = models.TextField(max_length=2000, null=True, blank=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -20,7 +20,7 @@ class Blogger(models.Model):
 class Comment(models.Model):
     comment_author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     comment_date = models.DateTimeField(auto_now_add=True)
-    commentary = models.TextField(max_length=500)
+    commentary = models.TextField(max_length=2000)
 
     def __str__(self):
         return f'\nUser: {self.comment_author.username} | {self.commentary[:75].strip()}...'
@@ -28,10 +28,10 @@ class Comment(models.Model):
 
 class Blog(models.Model):
     title = models.CharField(max_length=100, help_text='Blog title')
-    slug = models.SlugField(max_length=100,null=True, blank=True, db_index=True, help_text='for URL purposes.')
+    slug = models.SlugField(max_length=100, null=True, blank=True, db_index=True, help_text='for URL purposes.')
     post_date = models.DateField(auto_now_add=True)
     author = models.ForeignKey(Blogger, on_delete=models.SET_NULL, null=True)
-    description = models.TextField(max_length=500)
+    description = models.TextField(max_length=2000)
     comments = models.ManyToManyField(Comment, blank=True, help_text='comments for this post', editable=False)
 
     def __str__(self):
