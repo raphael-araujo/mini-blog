@@ -16,3 +16,5 @@ class BlogAdmin(admin.ModelAdmin):
 @admin.register(Blogger)
 class BloggerAdmin(admin.ModelAdmin):
     ordering = ('first_name',)
+    prepopulated_fields = {"slug": ("first_name", "last_name")}
+
