@@ -8,13 +8,14 @@ from django.urls import reverse
 class Blogger(models.Model):
     first_name = models.CharField(max_length=64,  null=True, help_text='Blogger first name')
     last_name = models.CharField(max_length=64, null=True, help_text='Blogger last name')
+    slug = models.SlugField(max_length=128, null=True, blank=True, db_index=True, help_text='for URL purposes')
     bio = models.TextField(max_length=2000, null=True, blank=True)
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
     def get_absolute_url(self):
-        return reverse('blogger_detail', args=self.first_name)
+        return reverse('blogger_detail', args=[self.slug])
 
 
 class Comment(models.Model):
