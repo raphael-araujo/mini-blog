@@ -10,6 +10,7 @@ class Blogger(models.Model):
     last_name = models.CharField(max_length=64, null=True, help_text='Blogger last name')
     slug = models.SlugField(max_length=128, null=True, blank=True, db_index=True, help_text='for URL purposes')
     bio = models.TextField(max_length=2000, null=True, blank=True)
+    blogs = models.ManyToManyField('Blog', blank=True, help_text='blogs written by this author', editable=True, )
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -36,7 +37,7 @@ class Blog(models.Model):
     comments = models.ManyToManyField(Comment, blank=True, help_text='comments for this post', editable=False)
 
     def __str__(self):
-        return self.title
+        return f'\n{self.title}'
 
     def get_absolute_url(self):
         return reverse('blog_detail', args=[self.slug])
