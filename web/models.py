@@ -25,7 +25,7 @@ class Comment(models.Model):
     commentary = models.TextField(max_length=2000)
 
     def __str__(self):
-        return f'\nUser: {self.comment_author.username} | {self.commentary[:75].strip()}...'
+        return f'\nUser: {self.comment_author} | {self.commentary[:75].strip()}...'
 
 
 class Blog(models.Model):
