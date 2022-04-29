@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Delete commentary</title>{% endblock  %}
+
+{% block content %}
+
+    <h3>Delete Commentary</h3>
+    
+    <p>Are you sure you want to delete this commentary?</p>
+    
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Yes, delete.">
+    </form>
+
+{% endblock %}
