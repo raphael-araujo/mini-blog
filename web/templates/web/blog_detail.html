@@ -14,20 +14,24 @@
         <hr>
         {% for comment in blog.comments.all %}
             <p align="justify">
-                <strong>{{ comment.comment_author }} ({{ comment.comment_date }})</strong> - {{ comment.commentary}}
+                <strong>{{ comment.comment_author }} ({{ comment.comment_date }})</strong> - {{ comment.commentary }}
+
             {% if user.is_authenticated and comment.comment_author == user %}
-                <br>
-                <a href="">Edit</a> | <a href="">Remove</a>
+                <form action="" method="get">
+                    <input type="text" value="{{ comment.id }}" name="c_id" hidden>
+                    <input type="submit" value="Edit" formaction="{% url 'edit_commentary' blog.slug %}">
+                    <input type="submit" value="Remove" formaction="{% url 'remove_commentary' blog.slug %}">
+                </form>
             {% endif %}
             </p>
             <hr>
         {% empty %}
             <p>there are no comments</p>
         {% endfor %}
-        
+
         <p>
             {% if user.is_authenticated %}
-                <a href="{% url 'comment_create' blog.slug %}">Add a new comment</a>
+                <a href="{% url 'add_commentary' blog.slug %}">Add a new comment</a>
             {% else %}
                 <a href="">Login</a> to add a new comment
             {% endif %}
