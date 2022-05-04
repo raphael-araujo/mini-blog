@@ -4,8 +4,11 @@
 
 {% block content %}
 
-    {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
+    {% if messages %}
+    {% comment %} {% if form.errors %} {% endcomment %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
     {% endif %}
     
     {% if next %}
