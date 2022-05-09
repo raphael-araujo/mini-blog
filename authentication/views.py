@@ -1,32 +1,27 @@
-from django.http import HttpResponse
+from django.contrib import auth, messages
+from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
-from django.contrib import auth , messages
-from .forms import LoginForm
+
+from .forms import LoginForm, RegisterForm
 
 # Create your views here.
 
 
 def login(request):
     form = LoginForm
-    # form.get_invalid_login_error
 
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        print(username)
-        print(password)
-        # print(form.errors)
+
         user = auth.authenticate(username=username, password=password)
-        
+
         if not user:
-            messages.error(request, message="Your username and password didn't match. Please try again.")
-            # print('A')
-            # form.error_messages
-            # form.errors
-            # form.get_invalid_login_error
-            
+            messages.error(
+                request, message="Your username and password didn't match. Please try again.")
+
             return redirect('/auth/login')
-        
+
         else:
             auth.login(request, user)
 
@@ -40,4 +35,44 @@ def login(request):
 
 
 def register(request):
-    return HttpResponse('teste')
+    form = RegisterForm
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+
+        user = User.objects.filter(username=username)
+
+        if user.exists() and password1 != password2:
+            messages.error(request, message='This username already exists')
+            messages.error(
+                request, message=form.error_messages['password_mismatch'])
+
+            return redirect('/auth/register')
+
+        if password1 != password2:
+            messages.error(
+                request, message=form.error_messages['password_mismatch'])
+
+            return redirect('/auth/register')
+
+        if user.exists():
+            messages.error(request, message='This username already exists')
+
+        try:
+            user = User.objects.create_user(
+                username=username, password=password2)
+            user.save()
+            messages.success(request, message='Usuário criado com sucesso.')
+
+            return redirect('/auth/login')
+
+        except:
+            return redirect('/auth/register')
+
+    else:
+        if request.user.is_authenticated:
+            return redirect('/blog/')
+
+        return render(request, 'register.html', {'form': form})
