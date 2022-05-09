@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}<title>Register</title>{% endblock %}
+
+{% block content %}
+
+    {% comment %} {% if messages %} {% endcomment %}
+
+    {% comment %} {% endif %} {% endcomment %}
+    
+    <h1>Register</h1>
+    <hr>
+    <p>
+        Already have an account? <a href="{% url 'login' %}">login</a>
+    </p>
+
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>
+                    {% if messages %}
+                        <hr>
+                        {% for message in messages %}
+                            <div class="alert-danger">
+                                <li>
+                                    {{message}}
+                                </li>
+                            </div>
+                        {% endfor %}
+                        <hr>
+                    {% endif %}
+                    <strong>Username:</strong>
+                    <br>
+                    {{ form.username }} {{ form.username.help_text }}
+                    <br>
+                    <br>
+                    <strong>Password:</strong>
+                    <br>
+                    {{ form.password1 }}
+                    {{ form.password1.help_text}}
+                    <br>
+                    <strong>Confirm password:</strong>
+                    <br>
+                    {{ form.password2 }} {{ form.password2.help_text}}
+                </td>
+                
+            </tr>
+        </table>
+        <br>
+        <input type="submit" value="Register"/>
+    </form>
+{% endblock %}
