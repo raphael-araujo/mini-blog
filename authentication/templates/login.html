@@ -3,14 +3,17 @@
 {% block title %}<title>Login</title>{% endblock %}
 
 {% block content %}
-
+    <h1>Login</h1>
+    <hr>
     {% if messages %}
-    {% comment %} {% if form.errors %} {% endcomment %}
         {% for message in messages %}
-            <p>{{ message }}</p>
+            <div class="alert-warning">
+                {{ message }}
+            </div>
         {% endfor %}
+        <br>
     {% endif %}
-    
+
     {% if next %}
         {% if user.is_authenticated %}
             <p>Your account doesn't have access to this page. To proceed,
@@ -19,24 +22,33 @@
             <p>Please login to see this page.</p>
         {% endif %}
     {% endif %}
-    
+
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <table>
             <tr>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
+                <td>
+                    <strong>Username:</strong>
+                    <br>
+                    {{ form.username }}
+                    <br>
+                    <br>
+                    <strong>Password:</strong>
+                    <br>
+                    {{ form.password }}
+                    <br>
+                </td>
             </tr>
         </table>
+        <br>
         <input type="submit" value="login" />
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
-    
-    {# Assumes you setup the password_reset view in your URLconf #}
-    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    <br>
+    <p>
+        <a href="{% url 'password_reset_form' %}">Lost password?</a>
+        <br>
+        <a href="{% url 'register' %}">Create an account</a>
+    </p>
 
 {% endblock %}
