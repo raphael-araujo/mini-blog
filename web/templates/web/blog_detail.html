@@ -10,7 +10,7 @@
     <p align="justify">{{ blog.description }}</p>
 
     <div style="margin-left:20px;margin-top:20px">
-        <h4>Comments</h4>
+        <h4>Comments{% if blog.comments.all %}({{ blog.comments.count }}){% endif %}</h4>
         <hr>
         {% for comment in blog.comments.all %}
             <p align="justify">
