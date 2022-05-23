@@ -65,6 +65,7 @@ class BloggerDetailView(generic.DetailView):
 @login_required(login_url='/auth/login')
 def add_commentary(request, slug):
     """View function para a página de adicionar comentários"""
+
     blog = get_object_or_404(Blog, slug=slug)
 
     if request.method == 'POST':
@@ -73,12 +74,14 @@ def add_commentary(request, slug):
         }
         form = CommentForm(data)
 
+        # Se os dados forem válidos, será criado um novo comentário:
         if form.is_valid():
             blog.comments.create(
                 comment_author=request.user,
                 comment_date=datetime.datetime.now(),
                 commentary=form.cleaned_data['commentary']
             )
+            # Depois o usuário será redirecionado novamente para o blog em que estava:
             return HttpResponseRedirect(reverse('blog_detail', args=(blog.slug,)))
 
     else:
@@ -95,8 +98,11 @@ def add_commentary(request, slug):
 
 @login_required(login_url='/auth/login')
 def edit_commentary(request, slug):
+    """View function para editar comentários."""
+
     blog = get_object_or_404(Blog, slug=slug)
 
+    # Buscar no banco de dados o comentário com o mesmo id da requisição 'get':
     comment_id = request.GET.get('c_id')
     comment = Comment.objects.get(id=comment_id)
 
@@ -106,13 +112,16 @@ def edit_commentary(request, slug):
         }
         form = CommentForm(data)
 
+        # Se o formulário estiver válido, o comentário antigo será substituído pelo novo:
         if form.is_valid():
             comment.commentary = form.cleaned_data['commentary']
             comment.save()
 
+            # Após a edição, o usuário será redirecionado para o blog em que estava:
             return HttpResponseRedirect(reverse('blog_detail', args=(blog.slug,)))
 
     else:
+        # Será renderizado um comentário inicialmente preenchido, para o usuário fazer a edição:
         form = CommentForm(
             initial={
                 'commentary': comment.commentary
@@ -127,14 +136,19 @@ def edit_commentary(request, slug):
 
 @login_required(login_url='/auth/login')
 def remove_commentary(request, slug):
+    """View function para remover comentários."""
+
     blog = get_object_or_404(Blog, slug=slug)
     comment_id = request.GET.get('c_id')
     comment = Comment.objects.get(id=comment_id)
 
     if request.method == 'POST':
+        # O comentário será deletado:
         comment.delete()
 
+        # O usuário vai ser redirecionado para o blog em que estava:
         return HttpResponseRedirect(reverse('blog_detail', args=(blog.slug,)))
 
     else:
+        # Uma página de confirmação de exclusão será renderizada:
         return render(request, 'web/comment_confirm_delete.html')
