@@ -8,11 +8,14 @@
     <h4>Bio</h4>
     <p align="justify">{{ blogger.bio }}</p>
     <h4>Blogs list</h4>
+        <br>
         <ul>
-            {% for blogs in blogger.blogs.all %}
+            {% for blogs in blogger.blogs.all|dictsortreversed:"post_date" %}
                 <li>
                     <a href="{{ blogs.get_absolute_url }}">{{ blogs }}</a> ({{ blogs.post_date }})
                 </li>
+            {% empty %}
+                <p>This author has no blogs yet.</p>
             {% endfor %}
         </ul>
 {% endblock %}
