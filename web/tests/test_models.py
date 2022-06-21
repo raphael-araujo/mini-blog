@@ -1,5 +1,9 @@
+from datetime import datetime
+
+from django.contrib.auth.models import User
 from django.test import TestCase
-from ..models import Blogger, Comment, Blog
+
+from ..models import Blog, Blogger, Comment
 
 # Create your tests here.
 
@@ -7,7 +11,11 @@ from ..models import Blogger, Comment, Blog
 class BloggerModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        Blogger.objects.create(first_name='Nome', last_name='Sobrenome', slug='nome-sobrenome')
+        Blogger.objects.create(
+            first_name='Nome',
+            last_name='Sobrenome',
+            slug='nome-sobrenome'
+        )
 
     def test_first_name_label(self):
         blogger = Blogger.objects.get(id=1)
@@ -63,3 +71,43 @@ class BloggerModelTest(TestCase):
         blogger = Blogger.objects.get(id=1)
         expected_url = f'/blog/blogger/{blogger.slug}'
         self.assertEquals(expected_url, blogger. get_absolute_url())
+
+
+class CommentModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        user = User.objects.create(
+            username='Usuario',
+            password='Senha123'
+        )
+
+        Comment.objects.create(
+            comment_author=user,
+            comment_date=datetime.now(),
+            commentary='Comentário de teste.'
+        )
+
+    def test_comment_author_label(self):
+        comment = Comment.objects.get(id=1)
+        field_label = comment._meta.get_field('comment_author').verbose_name
+        self.assertEquals(field_label, 'comment author')
+
+    def test_comment_date_label(self):
+        comment = Comment.objects.get(id=1)
+        field_label = comment._meta.get_field('comment_date').verbose_name
+        self.assertEquals(field_label, 'comment date')
+
+    def test_commentary_label(self):
+        comment = Comment.objects.get(id=1)
+        field_label = comment._meta.get_field('commentary').verbose_name
+        self.assertEquals(field_label, 'commentary')
+
+    def test_commentary_max_length(self):
+        comment = Comment.objects.get(id=1)
+        max_length = comment._meta.get_field('commentary').max_length
+        self.assertEquals(max_length, 2000)
+
+    def test_object_name_is_comment_author_and_first_75_letters_commentary(self):
+        comment = Comment.objects.get(id=1)
+        expected_object_name = f'\nUser: {comment.comment_author} | {comment.commentary[:75].strip()}...'
+        self.assertEquals(expected_object_name, str(comment))
