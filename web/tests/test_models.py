@@ -111,3 +111,75 @@ class CommentModelTest(TestCase):
         comment = Comment.objects.get(id=1)
         expected_object_name = f'\nUser: {comment.comment_author} | {comment.commentary[:75].strip()}...'
         self.assertEquals(expected_object_name, str(comment))
+
+
+class BlogModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        blogger = Blogger.objects.create(
+            first_name='Nome',
+            last_name='Sobrenome'
+        )
+
+        Blog.objects.create(
+            title='um Título de um Blog',
+            slug='um-titulo-de-um-blog',
+            post_date=datetime.now(),
+            author=blogger,
+            description='O conteúdo do blog'
+        )
+
+    def test_title_label(self):
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('title').verbose_name
+        self. assertEquals(field_label, 'title')
+
+    def test_slug_label(self):
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('slug').verbose_name
+        self.assertEquals(field_label, 'slug')
+
+    def test_post_date_label(self):
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('post_date').verbose_name
+        self.assertEquals(field_label, 'post date')
+
+    def test_author_label(self):
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('author').verbose_name
+        self.assertEquals(field_label, 'author')
+
+    def test_description_label(self):
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('description').verbose_name
+        self.assertEquals(field_label, 'description')
+
+    def test_comments_label(self):
+        blog = Blog.objects.get(id=1)
+        field_label = blog._meta.get_field('comments').verbose_name
+        self.assertEquals(field_label, 'comments')
+
+    def test_title_max_length(self):
+        blog = Blog.objects.get(id=1)
+        max_length = blog._meta.get_field('title').max_length
+        self.assertEquals(max_length, 100)
+
+    def test_slug_max_length(self):
+        blog = Blog.objects.get(id=1)
+        max_length = blog._meta.get_field('slug').max_length
+        self.assertEquals(max_length, 100)
+
+    def test_description_max_length(self):
+        blog = Blog.objects.get(id=1)
+        max_length = blog._meta.get_field('description').max_length
+        self.assertEquals(max_length, 2000)
+
+    def test_object_name_is_title(self):
+        blog = Blog.objects.get(id=1)
+        expected_object_name = f'\n{blog.title}'
+        self.assertEquals(expected_object_name, str(blog))
+
+    def test_absolute_url(self):
+        blog = Blog.objects.get(id=1)
+        expected_url = f'/blog/{blog.slug}/'
+        self.assertEquals(expected_url, blog.get_absolute_url())
